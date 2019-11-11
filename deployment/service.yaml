@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-proxy
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: image-proxy
+  type: ClusterIP
+---

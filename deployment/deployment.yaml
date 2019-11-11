@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: image-proxy
+  labels:
+    app: image-proxy
+spec:
+  selector:
+    matchLabels:
+      app: image-proxy
+
+  template:
+    metadata:
+      labels:
+        app: image-proxy
+    spec:
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
+
+      containers:
+        - image: darthsim/imgproxy:latest
+          imagePullPolicy: Always
+          name: imgproxy
+          env:
+            - name: IMGPROXY_SO_REUSEPORT
+              value: "true"
+            - name: IMGPROXY_ENABLE_WEBP_DETECTION
+              value: "true"
+
+        - image: ostermann/imgcache:latest
+          name: imgcache
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /var/cache/nginx
+          env:
+            - name: IMGPROXY
+              value: "imgproxy:8080"
+          ports:
+            - name: http
+              containerPort: 80

@@ -27,8 +27,25 @@ spec:
               value: "true"
             - name: IMGPROXY_ENABLE_WEBP_DETECTION
               value: "true"
-
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: image-cache
+  name: image-cache
+spec:
+  selector:
+    matchLabels:
+      app: image-cache
+  template:
+    metadata:
+      labels:
+        app: image-cache
+    spec:
+      containers:
         - image: ostermann/imgcache:latest
+          imagePullPolicy: Always
           name: imgcache
           volumeMounts:
             - name: cache-volume
@@ -39,3 +56,7 @@ spec:
           ports:
             - name: http
               containerPort: 80
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate

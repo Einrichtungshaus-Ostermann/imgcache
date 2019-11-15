@@ -13,3 +13,20 @@ spec:
     app: image-proxy
   type: ClusterIP
 ---
+# The imgproxy service is for internal use or to skip the cache
+apiVersion: v1
+kind: Service
+metadata:
+  name: imgproxy
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  externalTrafficPolicy: local
+  selector:
+    app: imgproxy
+  type: ClusterIP
+---

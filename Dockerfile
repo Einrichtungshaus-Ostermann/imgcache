@@ -1,6 +1,5 @@
-FROM nginx:alpine-perl
+FROM openresty/openresty:alpine
 
 EXPOSE 80
 
-ADD nginx.conf /etc/nginx/nginx.conf
-RUN rm /etc/nginx/conf.d/default.conf
+ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
